@@ -14,12 +14,20 @@ public class RegistrationResponse {
         return id;
     }
 
+    public String getServerPublicKey() {
+        return serverPublicKey;
+    }
+
     public void setId(String id) {
         this.id = id;
     }
 
-    public String getServerPublicKey() {
-        return serverPublicKey;
+    @Override
+    public String toString() {
+        return "RegistrationResponse{" +
+                "id='" + id + '\'' +
+                ", serverPublicKey='" + serverPublicKey + '\'' +
+                '}';
     }
 
     public void setServerPublicKey(String serverPublicKey) {
