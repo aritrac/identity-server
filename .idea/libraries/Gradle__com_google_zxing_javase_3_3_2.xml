@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: com.google.zxing:javase:3.3.2">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.zxing/javase/3.3.2/5b0f5e4aef3a0595033447e203f91c8e86b3a7a2/javase-3.3.2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.zxing/javase/3.3.2/ba18ae6502feac1c16d808f53ddaf13c2a9816b3/javase-3.3.2-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
