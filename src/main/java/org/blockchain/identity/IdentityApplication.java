@@ -1,6 +1,8 @@
 package org.blockchain.identity;
 
-import org.blockchain.identity.feature.KeyUtils;
+import org.blockchain.identity.utils.KeyUtils;
+import org.blockchain.identity.utils.QRCodeGenerator;
+import org.blockchain.identity.utils.Utils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -8,9 +10,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class IdentityApplication {
 
 	public static void main(String[] args) {
-		//SpringApplication.run(IdentityApplication.class, args);
-		KeyUtils.StringKeyPair keyPair = KeyUtils.generateRSASHA256Certs();
-		System.out.println(keyPair.getPrivateKey());
-		System.out.println(keyPair.getPublicKey());
+		SpringApplication.run(IdentityApplication.class, args);
+		/*System.out.println(QRCodeGenerator.generateQRCodeImage("appId=" + Utils.generateRandomId() + "&txId=" + Utils
+				.generateTransactionId()));*/
 	}
 }

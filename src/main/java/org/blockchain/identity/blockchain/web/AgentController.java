@@ -3,6 +3,7 @@ package org.blockchain.identity.blockchain.web;
 import org.blockchain.identity.blockchain.agent.Agent;
 import org.blockchain.identity.blockchain.agent.AgentManager;
 import org.blockchain.identity.blockchain.agent.Block;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,7 +18,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @RequestMapping(path = "/agent")
 public class AgentController {
 
-    private static AgentManager agentManager = new AgentManager();
+    @Autowired
+    private AgentManager agentManager;
 
     @RequestMapping(method = GET)
     public Agent getAgent(@RequestParam("name") String name) {
@@ -44,8 +46,8 @@ public class AgentController {
         agentManager.deleteAllAgents();
     }
 
-    @RequestMapping(method = POST, path = "mine")
-    public Block createBlock(@RequestParam(value = "agent") final String name) {
+    /*@RequestMapping(method = POST, path = "mine")
+    public Block createBlock(@RequestParam(value = "agent") final String name, final String data) {
         return agentManager.createBlock(name);
-    }
+    }*/
 }

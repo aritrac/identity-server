@@ -1,10 +1,13 @@
 package org.blockchain.identity.feature;
 
+import org.blockchain.identity.utils.KeyUtils;
+
 public class ServerKeys {
 
     private static final KeyUtils.StringKeyPair keyPair;
 
-    private static final String trustedAppPublicKey;
+    private static final String partnerAppPublicKey;
+    private static final String partnerId = "GdXmmidivpDpJjKCracYbuLRmXzHuKeq";
 
     static {
         keyPair = new KeyUtils.StringKeyPair("MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC4IBKqAmoH6saPHJ0pi" +
@@ -28,7 +31,7 @@ public class ServerKeys {
                 "94b2J1vbyrasW6Djg8GRUKsVqiyOL5aXLc2XNJg=\n" +
                 "-----END CERTIFICATE-----");
 
-        trustedAppPublicKey = "-----BEGIN CERTIFICATE-----\n" +
+        partnerAppPublicKey = "-----BEGIN CERTIFICATE-----\n" +
                 "MIIC6TCCAdGgAwIBAgIJAMHq0xBQLizBMA0GCSqGSIb3DQEBCwUAMDQxCzAJBgNV\n" +
                 "BAYTAklOMQswCQYDVQQKEwJDQTELMAkGA1UECxMCQ0ExCzAJBgNVBAMTAkNBMB4X\n" +
                 "DTE4MDUwOTA5NDcwNVoXDTI4MDUwNjA5NDcwNVowNDELMAkGA1UEBhMCSU4xCzAJ\n" +
@@ -56,7 +59,11 @@ public class ServerKeys {
         return keyPair.getPrivateKey();
     }
 
-    public static String getTrustedAppPublicKey() {
-        return trustedAppPublicKey;
+    public static String getPartnerAppPublicKey() {
+        return partnerAppPublicKey;
+    }
+
+    public static String getPartnerId() {
+        return partnerId;
     }
 }

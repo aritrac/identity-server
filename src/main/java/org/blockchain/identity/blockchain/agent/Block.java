@@ -12,6 +12,7 @@ public class Block implements Serializable {
     private String hash;
     private String previousHash;
     private String creator;
+    private String data;
 
     // for jackson
     public Block() {
@@ -23,6 +24,7 @@ public class Block implements Serializable {
                 "index=" + index +
                 ", timestamp=" + timestamp +
                 ", creator=" + creator +
+                ", data=" + data +
 //                ", hash='" + hash + '\'' +
 //                ", previousHash='" + previousHash + '\'' +
                 '}';
@@ -41,7 +43,8 @@ public class Block implements Serializable {
                 && timestamp.equals(block.timestamp)
                 && hash.equals(block.hash)
                 && previousHash.equals(block.previousHash)
-                && creator.equals(block.creator);
+                && creator.equals(block.creator)
+                && data.equals(block.data);
     }
 
     @Override
@@ -51,15 +54,17 @@ public class Block implements Serializable {
         result = 31 * result + hash.hashCode();
         result = 31 * result + previousHash.hashCode();
         result = 31 * result + creator.hashCode();
+        result = 31 * result + data.hashCode();
         return result;
     }
 
-    public Block(int index, String preHash, String creator) {
+    public Block(int index, String preHash, String creator, String data) {
         this.index = index;
         this.previousHash = preHash;
         this.creator = creator;
+        this.data = data;
         timestamp = System.currentTimeMillis();
-        hash = calculateHash(String.valueOf(index) + previousHash + String.valueOf(timestamp));
+        hash = calculateHash(String.valueOf(index) + previousHash + String.valueOf(timestamp) + data);
     }
 
     public String getCreator() {
@@ -80,6 +85,10 @@ public class Block implements Serializable {
 
     public String getPreviousHash() {
         return previousHash;
+    }
+
+    public String getData() {
+        return data;
     }
 
     private String calculateHash(String text) {

@@ -53,7 +53,7 @@ public class Agent {
         return blockchain;
     }
 
-    Block createBlock() {
+    Block createBlock(String data) {
         if (blockchain.isEmpty()) {
             return null;
         }
@@ -64,10 +64,35 @@ public class Agent {
         }
 
         final int index = previousBlock.getIndex() + 1;
-        final Block block = new Block(index, previousBlock.getHash(), name);
+        final Block block = new Block(index, previousBlock.getHash(), name, data);
         System.out.println(String.format("%s created new block %s", name, block.toString()));
         broadcast(Message.MESSAGE_TYPE.INFO_NEW_BLOCK, block);
         return block;
+    }
+
+    boolean verifyTransaction(String data) {
+        if(blockchain.isEmpty()) {
+            return false;
+        }
+        System.out.println("Total peers: " + peers.size());
+        ArrayList<Boolean> validity = new ArrayList<>();
+        peers.forEach(peer -> {
+            boolean isValid = verifyData(Message.MESSAGE_TYPE.REQ_CHECK_DATA, peer.getAddress(), peer.getPort(), data);
+            validity.add(isValid);
+        });
+        if(((double)validity.size()/peers.size()) > 0.5) {
+            return true;
+        }
+        return false;
+    }
+
+    boolean checkData(String data) {
+        for (final Block block : blockchain) {
+            if(block.getData().equals(data)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     void addBlock(Block block) {
@@ -133,9 +158,9 @@ public class Agent {
 
     private void sendMessage(Message.MESSAGE_TYPE type, String host, int port, Block... blocks) {
         try (
-                final Socket peer = new Socket(host, port);
-                final ObjectOutputStream out = new ObjectOutputStream(peer.getOutputStream());
-                final ObjectInputStream in = new ObjectInputStream(peer.getInputStream())) {
+            final Socket peer = new Socket(host, port);
+            final ObjectOutputStream out = new ObjectOutputStream(peer.getOutputStream());
+            final ObjectInputStream in = new ObjectInputStream(peer.getInputStream())) {
             Object fromPeer;
             while ((fromPeer = in.readObject()) != null) {
                 if (fromPeer instanceof Message) {
@@ -169,4 +194,35 @@ public class Agent {
         }
     }
 
+    private boolean verifyData(Message.MESSAGE_TYPE type, String host, int port, String data) {
+        try (
+                final Socket peer = new Socket(host, port);
+                final ObjectOutputStream out = new ObjectOutputStream(peer.getOutputStream());
+                final ObjectInputStream in = new ObjectInputStream(peer.getInputStream())) {
+            Message message = new Message.MessageBuilder().withSender(port).withType(type).withData(data).build();
+            out.writeObject(message);
+            Object fromPeer;
+            while ((fromPeer = in.readObject()) != null) {
+                if (fromPeer instanceof Message) {
+                    final Message msg = (Message) fromPeer;
+                    System.out.println(String.format("%d received: %s", this.port, msg.toString()));
+                    if (Message.MESSAGE_TYPE.RSP_CHECK_DATA == msg.type) {
+                        return msg.isValidData;
+                    }
+                }
+            }
+        } catch (UnknownHostException e) {
+            System.err.println(String.format("Unknown host %s %d", host, port));
+        } catch (IOException e) {
+            System.err.println(String.format("%s couldn't get I/O for the connection to %s. Retrying...%n", getPort(), port));
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e1) {
+                e1.printStackTrace();
+            }
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

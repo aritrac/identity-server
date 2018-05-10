@@ -5,10 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-import static org.blockchain.identity.blockchain.agent.Message.MESSAGE_TYPE.INFO_NEW_BLOCK;
-import static org.blockchain.identity.blockchain.agent.Message.MESSAGE_TYPE.READY;
-import static org.blockchain.identity.blockchain.agent.Message.MESSAGE_TYPE.REQ_ALL_BLOCKS;
-import static org.blockchain.identity.blockchain.agent.Message.MESSAGE_TYPE.RSP_ALL_BLOCKS;
+import static org.blockchain.identity.blockchain.agent.Message.MESSAGE_TYPE.*;
 
 public class AgentServerThread extends Thread {
     private Socket client;
@@ -22,9 +19,8 @@ public class AgentServerThread extends Thread {
 
     @Override
     public void run() {
-        try (
-                ObjectOutputStream out = new ObjectOutputStream(client.getOutputStream());
-                final ObjectInputStream in = new ObjectInputStream(client.getInputStream())) {
+        try (ObjectOutputStream out = new ObjectOutputStream(client.getOutputStream());
+            final ObjectInputStream in = new ObjectInputStream(client.getInputStream())) {
             Message message = new Message.MessageBuilder().withSender(agent.getPort()).withType(READY).build();
             out.writeObject(message);
             Object fromClient;
@@ -45,6 +41,13 @@ public class AgentServerThread extends Thread {
                                 .withSender(agent.getPort())
                                 .withType(RSP_ALL_BLOCKS)
                                 .withBlocks(agent.getBlockchain())
+                                .build());
+                        break;
+                    } else if(REQ_CHECK_DATA == msg.type) {
+                        out.writeObject(new Message.MessageBuilder()
+                                .withSender(agent.getPort())
+                                .withType(RSP_CHECK_DATA)
+                                .withIsValidData(agent.checkData(msg.data))
                                 .build());
                         break;
                     }

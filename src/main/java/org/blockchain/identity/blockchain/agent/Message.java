@@ -10,14 +10,17 @@ public class Message implements Serializable {
     int receiver;
     MESSAGE_TYPE type;
     List<Block> blocks;
+    String data;
+    boolean isValidData;
 
     public enum MESSAGE_TYPE {
-        READY, INFO_NEW_BLOCK, REQ_ALL_BLOCKS, RSP_ALL_BLOCKS
+        READY, INFO_NEW_BLOCK, REQ_ALL_BLOCKS, RSP_ALL_BLOCKS, REQ_CHECK_DATA, RSP_CHECK_DATA
     }
 
     @Override
     public String toString() {
-        return String.format("Message {type=%s, sender=%d, receiver=%d, blocks=%s}", type, sender, receiver, blocks);
+        return String.format("Message {type=%s, sender=%d, receiver=%d, blocks=%s, idValidData=%s}", type, sender,
+                receiver, blocks, isValidData);
     }
 
     static class MessageBuilder {
@@ -40,6 +43,16 @@ public class Message implements Serializable {
 
         MessageBuilder withBlocks(final List<Block> blocks) {
             message.blocks = blocks;
+            return this;
+        }
+
+        MessageBuilder withIsValidData(final boolean isValidData) {
+            message.isValidData = isValidData;
+            return this;
+        }
+
+        MessageBuilder withData(final String data) {
+            message.data = data;
             return this;
         }
 

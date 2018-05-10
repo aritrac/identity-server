@@ -4,10 +4,11 @@ import org.blockchain.identity.rest.RegistrationInfo;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class UserRegistry {
 
-    private Map<String, RegistrationInfo> userRegistry = new LinkedHashMap<>();
+    private Map<String, RegistrationInfo> userRegistry = new ConcurrentHashMap<>();
 
     private UserRegistry() {}
 
@@ -21,5 +22,9 @@ public class UserRegistry {
 
     public void put(String id, RegistrationInfo registrationInfo) {
         userRegistry.put(id, registrationInfo);
+    }
+
+    public RegistrationInfo get(String id) {
+        return userRegistry.get(id);
     }
 }
