@@ -61,7 +61,7 @@ function displayAgent(jsonAgent) {
 
     function addCellButton(name, onclick) {
         var button = document.createElement("BUTTON");
-        button.className = "cellButton";
+        button.className = "btn btn-danger";
         button.appendChild(document.createTextNode(name));
         button.onclick = onclick;
         return button;
