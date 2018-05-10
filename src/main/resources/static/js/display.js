@@ -85,14 +85,14 @@ function displayBlock(jsonBlock) {
 
 function getBlockString(block) {
     return "index=" + block.index + " creator=" + block.creator + " timestamp="
-        + block.timestamp + " hash=" + block.hash + " previous hash=" + block.previousHash + "<br>";
+        + block.timestamp + " hash=" + block.hash + " previousHash=" + block.previousHash + " data=" + block.data + "<br>";
 }
 
 function createBlockP(block) {
     var p = document.createElement("P");
     p.title = "creator " + block.creator;
     p.innerHTML = "index=" + block.index + " creator=" + block.creator + " timestamp="
-        + block.timestamp + " hash=" + block.hash + " previous hash=" + block.previousHash;
+        + block.timestamp + " hash=" + block.hash + " previousHash=" + block.previousHash + " data=" + block.data;
     console.log("create p.innerHTML" + p.innerHTML);
     return p;
 }
